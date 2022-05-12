@@ -15,7 +15,7 @@ I model an arm using angles and developed a mathematical model for that purpose.
 Backpropagation made possible after some pen and paper work. I derived all of this
 on a series of small physical post-it notes. 
 
-````C
+```C
 // model in short
 p[n] = (p_x[n], p_y[n])
 
