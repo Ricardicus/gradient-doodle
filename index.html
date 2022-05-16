@@ -38,6 +38,10 @@ Your browser does not support the HTML5 canvas tag.</canvas>
       <input onchange="newOptStrat();" type="radio" id="adam-select" value="adam" name="opt">
       <label for="dewey">ADAM <a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam">[link]</a></label>
     </div>
+    <div>
+      <input onchange="newOptStrat();" type="radio" id="adagrad-select" value="adagrad" name="opt">
+      <label for="adagrad">AdaGrad <a href="https://optimization.cbe.cornell.edu/index.php?title=AdaGrad">[link]</a></label>
+    </div>
 </fieldset>
 
 <input type="range" oninput="newLearningRate();"
@@ -79,6 +83,7 @@ var omegasStart = 35; // Initial value for all angles (percent of 2*PI)
 // Optimization choices
 var ADAM = Symbol("ADAM");
 var BASIC = Symbol("BASIC");
+var ADAGRAD = Symbol("ADAGRAD");
 
 var optimizationStrategy = BASIC;
 var optimizationStop = 4;
@@ -104,13 +109,16 @@ var adam_epsilon = 0.000001;
 var adam_v = []; // one per omega
 var adam_momentum_omegas = []; // one per omega
 
+// Ada grad optimization parameters
+var adagrad_G = [];
+
 // Regularization
 var lambda = 0.0;
 
-function newOptStrat() {
-  if (document.getElementById("adam-select").checked) {
-    optimizationStrategy = ADAM;
-    learningRate = 0.3943;
+// To avoid div by zero
+var epsilon = 0.00000000001;
+
+function updateLearningRateBar() {
     document.getElementById("label-learning-rate").innerHTML = "Learning rate: " + 
          Number.parseFloat(learningRate).toPrecision(4);
  
@@ -121,10 +129,23 @@ function newOptStrat() {
 
     var val = parseInt( (targetE - minv) / scale );
     document.getElementById("learning-rate").value = val;
+}
+
+function newOptStrat() {
+  if (document.getElementById("adam-select").checked) {
+    optimizationStrategy = ADAM;
+    learningRate = 0.3943;
+    updateLearningRateBar();
 
     // Showing inputs    
     document.getElementById("adam-inputs").style.display = "inherit";
-  } else {
+  } else if (document.getElementById("adagrad-select").checked) {
+    learningRate = 0.3943;
+    updateLearningRateBar();
+
+    optimizationStrategy = ADAGRAD;
+    document.getElementById("adam-inputs").style.display = "none";
+ } else {
     optimizationStrategy = BASIC;
     document.getElementById("adam-inputs").style.display = "none";
   }
@@ -173,9 +194,11 @@ function resetOptimization() {
   optimizationStopReached = false;
   adam_v = [];
   adam_momentum_omegas = [];
+  adagrad_G = [];
   omegas.forEach((a) => {
     adam_v.push(0.0);
     adam_momentum_omegas.push(0.0);
+    adagrad_G.push(0.0);
   });
 }
 
@@ -295,6 +318,10 @@ function populateValues() {
   // check optimization
   if ( document.getElementById("adam-select").checked ) {
     optimizationStrategy = ADAM;
+  } else if ( document.getElementById("adagrad-select").checked )  {
+    optimizationStrategy = ADAGRAD;
+  } else {
+    optimizationStrategy = BASIC;
   }
 }
 
@@ -379,6 +406,12 @@ function updateOmegas(points) {
        vhat = adam_v[i] / ( 1.0 - adam_beta_2 );
        mhat = adam_momentum_omegas[i] / ( 1.0 - adam_beta_1 );
        omegas[i] = omegas[i] - learningRate * mhat / ( Math.sqrt(vhat) + adam_epsilon );
+     }
+   } else if ( optimizationStrategy == ADAGRAD ) {
+     for (var i = 0; i < omegas.length; i++ ) {
+       var g = de_domegas[i];
+       adagrad_G[i] += Math.pow(g, 2);
+       omegas[i] = omegas[i] - learningRate * ( (1.0 / Math.sqrt(adagrad_G[i] + epsilon)) * de_domegas[i] );
      }
    } else {
      console.log("no opt..");
