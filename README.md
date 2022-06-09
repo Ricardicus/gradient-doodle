@@ -30,8 +30,8 @@ p[0] = /* start position of the arm */
 E = 1/2 * (p - t) ^ 2
 dE/dPn = (p - t) * ( dP/dOmega_q ) = ( (px[n] - tx) * dp_x[n]/dOmega_q , (py[n] - ty) * dp_y[n]/dOmega_q )
 
-dP_x[n]/dOmega_q = 0 if q > n otherwise dP_x[n-1]/dOmega_q - sin( sum(omegas up to n) + (n-1) * pi)
-dP_y[n]/dOmega_q = 0 if q > n otherwise dP_y[n-1]/dOmega_q + cos( sum(omegas up to n) + (n-1) * pi) 
+dP_x[n]/dOmega_q = 0 if q > n otherwise dP_x[n-1]/dOmega_q - r_n * sin( sum(omegas up to n) + (n-1) * pi)
+dP_y[n]/dOmega_q = 0 if q > n otherwise dP_y[n-1]/dOmega_q + r_n * cos( sum(omegas up to n) + (n-1) * pi) 
 ```
 
 # Test
