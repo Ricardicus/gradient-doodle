@@ -255,8 +255,8 @@ function de_dpny_domega_q(omegas, radiuses, R, q, n) {
 
 function de_domega_q(point, target, radiuses, omegas, R, q) {
   var n = omegas.length;
-      return Math.abs(point[0]-target[0]) * de_dpnx_domega_q(omegas, radiuses, R, q, n) +
- Math.abs(point[1]-target[1]) * de_dpny_domega_q(omegas, radiuses, R, q, n);
+      return (point[0]-target[0]) * de_dpnx_domega_q(omegas, radiuses, R, q, n) +
+ (point[1]-target[1]) * de_dpny_domega_q(omegas, radiuses, R, q, n);
 }
 
 function p_n_x(omegas, radiuses, R, n) {
