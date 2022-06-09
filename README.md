@@ -37,7 +37,8 @@ dP_y[n]/dOmega_q = 0 if q > n otherwise dP_y[n-1]/dOmega_q + cos( sum(omegas up 
 # Test
 
 Download the repo and open the index.html.
-Or visit [this link](https://me.ricardicus.se/7ef9bb61b8d8740133e7cb423e9e28e3) where I host the project.
+
+Or visit this link to where I host the project: [demo](https://me.ricardicus.se/7ef9bb61b8d8740133e7cb423e9e28e3)
 
 
 
