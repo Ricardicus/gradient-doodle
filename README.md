@@ -19,8 +19,8 @@ on a series of small physical post-it notes.
 // model in short
 p[n] = (p_x[n], p_y[n])
 
-p_x[n] = p_x[n-1] + cos( sum(omegas up to n) + (n-1) * pi )
-p_y[n] = p_y[n-1] + sin( sum(omegas up to n) + (n-1) * pi ) 
+p_x[n] = p_x[n-1] + r_n * cos( sum(omegas up to n) + (n-1) * pi )
+p_y[n] = p_y[n-1] + r_n * sin( sum(omegas up to n) + (n-1) * pi ) 
 
 p[0] = /* start position of the arm */
 
